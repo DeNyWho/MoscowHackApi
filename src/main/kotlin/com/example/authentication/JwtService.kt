@@ -20,7 +20,7 @@ class JwtService {
         return JWT.create()
             .withSubject("BoberAuthentication")
             .withIssuer(issuer)
-            .withClaim("email", user.email)
+            .withClaim("id", user.id)
             .sign(algorithm)
     }
 }
