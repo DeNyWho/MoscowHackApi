@@ -1,5 +1,6 @@
 package com.example.repository
 
+import com.example.data.table.PrefsTable
 import com.example.data.table.UserTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -16,10 +17,11 @@ object DatabaseFactory {
 
         transaction {
             SchemaUtils.create(UserTable)
+            SchemaUtils.create(PrefsTable)
         }
     }
 
-    fun hikari(): HikariDataSource {
+    private fun hikari(): HikariDataSource {
         val config = HikariConfig()
         config.driverClassName = System.getenv("JDBC_DRIVER")
         config.jdbcUrl = System.getenv("DATABASE_URL")

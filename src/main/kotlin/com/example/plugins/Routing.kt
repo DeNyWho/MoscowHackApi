@@ -1,6 +1,11 @@
 package com.example.plugins
 
-import com.example.routes.users.UsersRoute
+import com.example.authentication.JwtService
+import com.example.authentication.hash
+import com.example.repository.DatabaseFactory
+import com.example.repository.RepositoryImpl
+import com.example.routes.prefs.setPrefs
+import com.example.routes.users.*
 import io.ktor.server.routing.*
 import io.ktor.http.*
 import io.ktor.server.locations.*
@@ -8,36 +13,27 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.request.*
 
-//@OptIn(KtorExperimentalLocationsAPI::class)
-//fun Application.configureRouting() {
+fun Application.configureRouting() {
+    install(Locations)
 
-//    routing {
-//        get<UsersRoute.UserDetailsRoute> {
-//
-//        }
-//        get("/") {
-//            call.respondText("Hello World!")
-//        }
-//        get<MyLocation> {
-//            call.respondText("Location: name=${it.name}, arg1=${it.arg1}, arg2=${it.arg2}")
-//        }
-//        // Register nested routes
-//        get<Type.Edit> {
-//            call.respondText("Inside $it")
-//        }
-//        get<Type.List> {
-//            call.respondText("Inside $it")
-//        }
-//    }
-//}
+    DatabaseFactory.init()
+    val db = RepositoryImpl()
+    val jwtService = JwtService()
+    val hashFunction = { s: String -> hash(s) }
 
-//@Location("/location/{name}")
-//class MyLocation(val name: String, val arg1: Int = 42, val arg2: String = "default")
-//@Location("/type/{name}")
-//data class Type(val name: String) {
-//    @Location("/edit")
-//    data class Edit(val type: Type)
-//
-//    @Location("/list/{page}")
-//    data class List(val type: Type, val page: Int)
-//}
+    routing {
+        get("/") {
+            return@get call.respond(HttpStatusCode.OK, "TEST")
+        }
+
+        // User routes
+        login(db, jwtService, hashFunction)
+        register(db, jwtService, hashFunction)
+        getUser(db)
+        updateUser(db, jwtService, hashFunction)
+
+        // Prefs Routes
+        setPrefs()
+    }
+
+}

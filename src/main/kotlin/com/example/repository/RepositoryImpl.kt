@@ -1,6 +1,8 @@
 package com.example.repository
 
+import com.example.data.model.Prefs
 import com.example.data.model.User
+import com.example.data.table.PrefsTable
 import com.example.data.table.UserTable
 import com.example.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
@@ -63,6 +65,27 @@ class RepositoryImpl: Repository {
         return if (rowsUpdated > 0) getUser(userId) else null
     }
 
+    override suspend fun postPrefs(prefs: String): Boolean = dbQuery {
+        PrefsTable.insert {
+            it[name] = prefs
+        }
+        true
+    }
+
+    override suspend fun getPrefs(): List<Prefs> = dbQuery {
+        PrefsTable.selectAll().mapNotNull { rowToPrefs(it) }
+    }
+
+
+    private fun rowToPrefs(row: ResultRow?): Prefs? {
+        if(row == null) {
+            return null
+        }
+        return Prefs(
+            id = row[PrefsTable.id],
+            name = row[PrefsTable.name]
+        )
+    }
 
     private fun rowToUser(row: ResultRow?): User? {
         if (row == null) {

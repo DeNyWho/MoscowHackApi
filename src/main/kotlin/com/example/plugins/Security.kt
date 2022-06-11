@@ -24,12 +24,10 @@ import io.ktor.server.request.*
 import io.ktor.server.routing.*
 
 fun Application.configureSecurity() {
-    install(Locations)
     install(Sessions) {
         cookie<ServerSession>("HACK_SESSION")
     }
 
-    DatabaseFactory.init()
     val db = RepositoryImpl()
     val jwtService = JwtService()
     val hashFunction = { s: String -> hash(s) }
@@ -48,16 +46,4 @@ fun Application.configureSecurity() {
         }
     }
 
-    routing {
-        get("/") {
-            return@get call.respond(HttpStatusCode.OK, "TEST")
-        }
-
-        // User routes
-        login(db, jwtService, hashFunction)
-        register(db, jwtService, hashFunction)
-        getUser(db)
-        updateUser(db, jwtService, hashFunction)
-
-    }
 }

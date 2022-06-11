@@ -7,7 +7,7 @@ import io.ktor.server.locations.*
 object UsersRoute {
     private const val USERS = "/users"
     const val USER_LOGIN = "$USERS/login"
-    const val USER_REGISTER = "$USERS/register"
+    const val USER_REGISTER = "$USERS/registration"
     const val USER_DETAILS = "$USERS/{id}"
     const val USER_UPDATE = USERS
     const val USERS_AVAILABLE = USERS
