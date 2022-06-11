@@ -1,6 +1,9 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val exposedVersion: String by project
+val postgresVersion: String by project
+val hikariVersion: String by project
 
 plugins {
     application
@@ -23,6 +26,16 @@ repositories {
 }
 
 dependencies {
+    //exposed
+    implementation ("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation ("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation ("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+
+    // PgSQL
+    implementation ("org.postgresql:postgresql:$postgresVersion")
+
+    // Hikari Apping
+    implementation ("com.zaxxer:HikariCP:$hikariVersion")
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
