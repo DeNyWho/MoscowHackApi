@@ -4,6 +4,7 @@ import com.example.authentication.JwtService
 import com.example.authentication.ServerSession
 import com.example.data.model.RegisterRequest
 import com.example.data.response.AuthorizedUserResponse
+import com.example.data.response.ErrorResponse
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -12,6 +13,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.routing.application
 import io.ktor.server.sessions.*
+import io.ktor.util.reflect.*
 
 fun Route.register(
     db: Repository,
@@ -27,7 +29,7 @@ fun Route.register(
         val type = signupParameters.type
 
         if (!db.checkEmailAvailable(email)) {
-            return@post call.respond(HttpStatusCode(405, "Already registered"))
+            call.respond(message = ErrorResponse(errorCode = 400, message = "Already registered"), status = HttpStatusCode.BadRequest)
         }
 
         val hash = hashFunction(password)
@@ -44,7 +46,7 @@ fun Route.register(
                 )
                 call.sessions.set(ServerSession(it))
                 call.respond(authorizedUser)
-            } ?: call.respond(HttpStatusCode(405, "Already registered"))
+            } ?:  call.respond(message = ErrorResponse(errorCode = 400, message = "Already registered"), status = HttpStatusCode.BadRequest)
         } catch (e: Throwable) {
             application.log.error("Failed to register user", e)
             call.respond(HttpStatusCode(400, "Failed to execute request (exception ${e.localizedMessage})"))

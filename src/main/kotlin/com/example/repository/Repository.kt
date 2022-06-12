@@ -1,7 +1,10 @@
 package com.example.repository
 
-import com.example.data.model.Prefs
 import com.example.data.model.User
+import com.example.data.model.organization.Organization
+import com.example.data.table.OrganizationTable
+import com.example.data.table.OrganizationTable.uniqueIndex
+import org.jetbrains.exposed.sql.Column
 
 interface Repository {
 
@@ -31,11 +34,28 @@ interface Repository {
         type: String
     ): User?
 
-    // prefs
+    suspend fun insertVolunteerPrefs(
+        userId: Int,
+        prefs: List<Int>
+    )
 
-    suspend fun postPrefs(prefs: String): Boolean
+    suspend fun insertVolunteer(
+        userId: Int,
+        description: String,
+        phone: String,
+        hours: Int,
+        coins: Int
+    )
+    suspend fun insertOrganization(
+        userId: Int,
+        email: String,
+        name: String,
+        description: String,
+        site: String
+    ): Organization?
 
-    suspend fun getPrefs(): List<Prefs>
+    suspend fun getOrganizations(): List<Organization>
 
+    suspend fun getOrganizationById(id: Int): Organization?
 
 }

@@ -1,9 +1,8 @@
 package com.example.repository
 
-import com.example.data.model.Prefs
 import com.example.data.model.User
-import com.example.data.table.PrefsTable
-import com.example.data.table.UserTable
+import com.example.data.model.organization.Organization
+import com.example.data.table.*
 import com.example.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
@@ -65,25 +64,72 @@ class RepositoryImpl: Repository {
         return if (rowsUpdated > 0) getUser(userId) else null
     }
 
-    override suspend fun postPrefs(prefs: String): Boolean = dbQuery {
-        PrefsTable.insert {
-            it[name] = prefs
+    override suspend fun insertVolunteerPrefs(userId: Int, prefs: List<Int>) = dbQuery {
+        for(i in prefs.indices) {
+            VolunteersPrefs.insert {
+                it[user] = userId
+                it[pref] = prefs[i]
+            }
         }
-        true
     }
 
-    override suspend fun getPrefs(): List<Prefs> = dbQuery {
-        PrefsTable.selectAll().mapNotNull { rowToPrefs(it) }
+    override suspend fun insertVolunteer(
+        userId: Int,
+        description: String,
+        phone: String,
+        hours: Int,
+        coins: Int
+    ) {
+        dbQuery {
+            Volunteers.insert {
+                it[userID] = userId
+                it[Volunteers.description] = description
+                it[Volunteers.phone] = phone
+                it[Volunteers.coins] = coins
+                it[Volunteers.hours] = hours
+            }
+        }
     }
 
+    override suspend fun insertOrganization(
+        userId: Int,
+        email: String,
+        name: String,
+        description: String,
+        site: String
+    ): Organization? {
+        var statement: InsertStatement<Number>? = null
+        dbQuery {
+            statement =  OrganizationTable.insert {
+                it[userID] = userId
+                it[OrganizationTable.email] = email
+                it[OrganizationTable.name] = name
+                it[OrganizationTable.description] = description
+                it[OrganizationTable.site] = site
+            }
+        }
+        return rowToOrganization(statement?.resultedValues?.get(0))
+    }
 
-    private fun rowToPrefs(row: ResultRow?): Prefs? {
-        if(row == null) {
+    override suspend fun getOrganizations(): List<Organization> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getOrganizationById(id: Int): Organization? = dbQuery {
+        OrganizationTable.select { OrganizationTable.id eq id }.map { rowToOrganization(it) }.singleOrNull()
+    }
+
+    private fun rowToOrganization(row: ResultRow?): Organization? {
+        if(row == null){
             return null
         }
-        return Prefs(
-            id = row[PrefsTable.id],
-            name = row[PrefsTable.name]
+        return Organization(
+            id = row[OrganizationTable.id],
+            userId = row[OrganizationTable.userID],
+            email = row[OrganizationTable.email],
+            name = row[OrganizationTable.name],
+            description = row[OrganizationTable.description],
+            site = row[OrganizationTable.site]
         )
     }
 

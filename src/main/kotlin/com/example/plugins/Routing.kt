@@ -4,8 +4,11 @@ import com.example.authentication.JwtService
 import com.example.authentication.hash
 import com.example.repository.DatabaseFactory
 import com.example.repository.RepositoryImpl
+import com.example.routes.organisation.getOrganization
+import com.example.routes.organisation.insertOrganization
 import com.example.routes.prefs.setPrefs
 import com.example.routes.users.*
+import com.example.routes.volunteer.insertVolunteer
 import io.ktor.server.routing.*
 import io.ktor.http.*
 import io.ktor.server.locations.*
@@ -34,6 +37,11 @@ fun Application.configureRouting() {
 
         // Prefs Routes
         setPrefs()
+        insertVolunteer(db)
+
+        //Organization
+        insertOrganization(db)
+        getOrganization(db)
     }
 
 }

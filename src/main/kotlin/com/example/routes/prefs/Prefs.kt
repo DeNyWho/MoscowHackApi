@@ -1,16 +1,9 @@
 package com.example.routes.prefs
 
-import com.example.data.model.Prefs
-import com.example.data.model.UserResponse
-import com.example.data.response.ErrorResponse
-import com.example.data.table.PrefsTable
+import com.example.data.table.Prefs
 import com.example.repository.DatabaseFactory
-import com.example.repository.Repository
-import com.example.routes.users.UsersRoute
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.locations.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.insert
@@ -19,48 +12,37 @@ fun Route.setPrefs() {
     post("/prefs") {
         try {
             DatabaseFactory.dbQuery {
-                PrefsTable.insert {
-                    it[id] = 1
+                Prefs.insert {
                     it[name] = "Social"
                 }
-                PrefsTable.insert {
-                    it[id] = 2
+                Prefs.insert {
                     it[name] = "Ecology"
                 }
-                PrefsTable.insert {
-                    it[id] = 3
+                Prefs.insert {
                     it[name] = "Culture"
                 }
-                PrefsTable.insert {
-                    it[id] = 4
+                Prefs.insert {
                     it[name] = "Media"
                 }
-                PrefsTable.insert {
-                    it[id] = 5
+                Prefs.insert {
                     it[name] = "Event"
                 }
-                PrefsTable.insert {
-                    it[id] = 6
+                Prefs.insert {
                     it[name] = "Sport"
                 }
-                PrefsTable.insert {
-                    it[id] = 7
+                Prefs.insert {
                     it[name] = "Patriotic"
                 }
-                PrefsTable.insert {
-                    it[id] = 8
+                Prefs.insert {
                     it[name] = "Animal"
                 }
-                PrefsTable.insert {
-                    it[id] = 9
+                Prefs.insert {
                     it[name] = "Corporate"
                 }
-                PrefsTable.insert {
-                    it[id] = 10
+                Prefs.insert {
                     it[name] = "Medicine"
                 }
-                PrefsTable.insert {
-                    it[id] = 11
+                Prefs.insert {
                     it[name] = "Sociality"
                 }
             }

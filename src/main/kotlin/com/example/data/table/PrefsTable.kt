@@ -1,12 +1,24 @@
 package com.example.data.table
 
-import com.example.data.table.OrganisationTable.references
+import org.jetbrains.exposed.dao.Entity
+import org.jetbrains.exposed.dao.EntityClass
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 
-object PrefsTable: Table() {
-    val id: Column<Int> = integer("id").autoIncrement()
-    val name: Column<String> = varchar("name",200)
+object Prefs: IntIdTable() {
+    val name = varchar("name", 50)
+}
+class Pref(id: EntityID<Int>): IntEntity(id) {
+    companion object : IntEntityClass<Pref>(Prefs)
+    var name by Prefs.name
+}
 
-    override val primaryKey: Table.PrimaryKey = PrimaryKey(OrganisationTable.id)
+object VolunteersPrefs : Table() {
+    val user = reference("user", Volunteers)
+    val pref = reference("pref", Prefs)
+    override val primaryKey = PrimaryKey(user, pref, name = "PK_User_Pref")
 }
