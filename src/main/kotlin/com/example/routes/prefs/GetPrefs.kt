@@ -1,4 +1,4 @@
-package com.example.routes.volunteer
+package com.example.routes.prefs
 
 import com.example.repository.Repository
 import io.ktor.server.routing.*

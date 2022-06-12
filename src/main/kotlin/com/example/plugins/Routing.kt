@@ -34,6 +34,7 @@ fun Application.configureRouting() {
         register(db, jwtService, hashFunction)
         getUser(db)
         updateUser(db, jwtService, hashFunction)
+        getUsers(db)
 
         // Prefs Routes
         setPrefs()

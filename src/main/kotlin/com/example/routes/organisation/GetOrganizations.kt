@@ -13,7 +13,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 @OptIn(KtorExperimentalLocationsAPI::class)
-fun Route.getOrganization(db: Repository) {
+fun Route.getOrganizations(db: Repository) {
     get<OrganizationRoute.OrganizationDetailsRoute> { organizationDetails ->
         try {
             val organizationDetailsFromDb = db.getOrganizationById(organizationDetails.id)
@@ -36,5 +36,4 @@ fun Route.getOrganization(db: Repository) {
             call.respond(HttpStatusCode(400, "Failed to execute request (exception ${e.localizedMessage})"))
         }
     }
-
 }

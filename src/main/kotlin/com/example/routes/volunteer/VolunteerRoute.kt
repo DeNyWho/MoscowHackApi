@@ -8,6 +8,6 @@ object VolunteerRoute {
     const val VOLUNTEER_INSERT = "$volunteer/insert"
     const val VOLUNTEER_BY_ID = "$volunteer/{id}"
 
-    @Location(OrganizationRoute.ORGANIZATION_BY_ID)
-    data class OrganizationDetailsRoute(val id: Int)
+    @Location(VOLUNTEER_BY_ID)
+    data class VolunteerDetailsRoute(val id: Int)
 }
