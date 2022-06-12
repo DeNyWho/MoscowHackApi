@@ -6,6 +6,7 @@ import com.example.data.model.prefs.PrefCommon
 import com.example.data.model.prefs.PrefsUser
 import com.example.data.model.submission.Submission
 import com.example.data.model.user.User
+import com.example.data.model.volunteer.Volunteer
 import com.example.data.table.*
 import com.example.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
@@ -27,7 +28,7 @@ class RepositoryImpl: Repository {
         dbQuery {
             statement = UserTable.insert { user ->
                 user[UserTable.email] = email
-                user[UserTable.hashPassword] = passwordHash
+                user[hashPassword] = passwordHash
                 user[UserTable.name] = name
                 user[UserTable.secondName] = name
                 user[UserTable.type] = type
@@ -62,7 +63,7 @@ class RepositoryImpl: Repository {
                 it[UserTable.secondName] = secondName
                 it[UserTable.email] = email
                 it[UserTable.type] = type
-                passwordHash.let { hash -> it[UserTable.hashPassword] = hash }
+                passwordHash.let { hash -> it[hashPassword] = hash }
             }
         }
         return if (rowsUpdated > 0) getUser(userId) else null
@@ -126,6 +127,15 @@ class RepositoryImpl: Repository {
             }
         }
     }
+
+    override suspend fun getVolunteers(): List<Volunteer> = dbQuery {
+        Volunteers.selectAll().mapNotNull { rowToVolunteer(it) }
+    }
+
+    override suspend fun getVolunteerById(volunteerID: Int): Volunteer? = dbQuery {
+        Volunteers.select { Volunteers.id eq volunteerID }.map { rowToVolunteer(it) }.singleOrNull()
+    }
+
 
     override suspend fun insertOrganization(
         userId: Int,
@@ -257,6 +267,20 @@ class RepositoryImpl: Repository {
             }
         }
         return true
+    }
+
+    private fun rowToVolunteer(row: ResultRow?): Volunteer? {
+        if(row == null){
+            return null
+        }
+        return Volunteer(
+            id = row[Volunteers.id].value,
+            userId = row[Volunteers.userID],
+            description = row[Volunteers.description],
+            phone = row[Volunteers.phone],
+            hours = row[Volunteers.hours],
+            coins = row[Volunteers.coins]
+        )
     }
 
     private fun rowToSubmission(row: ResultRow?): Submission?{

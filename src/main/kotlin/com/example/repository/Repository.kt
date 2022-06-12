@@ -6,6 +6,7 @@ import com.example.data.model.prefs.PrefCommon
 import com.example.data.model.prefs.PrefsUser
 import com.example.data.model.submission.Submission
 import com.example.data.model.user.User
+import com.example.data.model.volunteer.Volunteer
 
 interface Repository {
 
@@ -64,6 +65,12 @@ interface Repository {
         coins: Int,
         prefs: List<Int>
     )
+
+    suspend fun getVolunteers(): List<Volunteer>
+
+    suspend fun getVolunteerById(volunteerID: Int): Volunteer?
+
+
     suspend fun insertOrganization(
         userId: Int,
         email: String,

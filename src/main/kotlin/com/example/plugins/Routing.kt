@@ -17,6 +17,8 @@ import com.example.routes.prefs.getVolunteerPrefs
 import com.example.routes.prefs.setPrefs
 import com.example.routes.submission.*
 import com.example.routes.users.*
+import com.example.routes.volunteer.getVolunteerById
+import com.example.routes.volunteer.getVolunteers
 import com.example.routes.volunteer.insertVolunteer
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -47,7 +49,6 @@ fun Application.configureRouting() {
 
         // Prefs Routes
         setPrefs()
-        insertVolunteer(db)
         getVolunteerPrefs(db)
         getPrefs(db)
 
@@ -70,6 +71,11 @@ fun Application.configureRouting() {
         deleteSubmission(db)
         updateSubmissionType(db)
         updateSubmissionStatus(db)
+
+        //volunteers
+        insertVolunteer(db)
+        getVolunteers(db)
+        getVolunteerById(db)
     }
 
 }
