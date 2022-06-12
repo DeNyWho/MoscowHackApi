@@ -26,6 +26,10 @@ repositories {
 }
 
 dependencies {
+
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-serialization:$ktor_version")
     //exposed
     implementation ("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation ("org.jetbrains.exposed:exposed-dao:$exposedVersion")

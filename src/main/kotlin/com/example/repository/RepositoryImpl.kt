@@ -106,28 +106,24 @@ class RepositoryImpl: Repository {
         description: String,
         phone: String,
         hours: Int,
-        coins: Int,
-        prefs: List<Int>
-    ) {
+        coins: Int
+    ): Volunteer? {
+        var statement: InsertStatement<Number>? = null
         dbQuery {
-            Volunteers.insert {
-                it[userID] = userId
+            statement = Volunteers.insert {
+                it[Volunteers.userID] = userId
                 it[Volunteers.description] = description
                 it[Volunteers.phone] = phone
                 it[Volunteers.coins] = coins
                 it[Volunteers.hours] = hours
             }
-            for(i in prefs.indices) {
-                VolunteersPrefs.insert {
-                    it[user] = userId
-                    it[pref] = prefs[i]
-                }
-            }
             UserTable.update({UserTable.id eq userId}) {
                 it[type] = "Volunteer"
             }
         }
+        return rowToVolunteer(statement?.resultedValues?.get(0))
     }
+
 
     override suspend fun getVolunteers(): List<Volunteer> = dbQuery {
         Volunteers.selectAll().mapNotNull { rowToVolunteer(it) }
@@ -191,7 +187,11 @@ class RepositoryImpl: Repository {
         hours: Int,
         coins: Int,
         city: String,
-        place: String
+        place: String,
+        methodEvent: String,
+        roles: String,
+        age: String,
+        skills: String,
     ): Event {
         var statement: InsertStatement<Number>? = null
         dbQuery {
@@ -203,6 +203,10 @@ class RepositoryImpl: Repository {
                 it[Events.coins] = coins
                 it[Events.city] = city
                 it[Events.place] = place
+                it[Events.methodEvent] = methodEvent
+                it[Events.roles] = roles
+                it[Events.age] = age
+                it[Events.skills] = skills
             }
         }
         return rowToEvent(statement?.resultedValues?.get(0)!!)
@@ -390,7 +394,12 @@ class RepositoryImpl: Repository {
             hours = row[Events.hours],
             coins = row[Events.coins],
             city = row[Events.city],
-            place = row[Events.place]
+            place = row[Events.place],
+            methodEvent = row[Events.methodEvent],
+            roles = row[Events.roles],
+            age = row[Events.age],
+            skills = row[Events.skills]
+
         )
     }
 

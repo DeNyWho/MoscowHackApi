@@ -63,9 +63,8 @@ interface Repository {
         description: String,
         phone: String,
         hours: Int,
-        coins: Int,
-        prefs: List<Int>
-    )
+        coins: Int
+    ): Volunteer?
 
     suspend fun getVolunteers(): List<Volunteer>
 
@@ -96,7 +95,11 @@ interface Repository {
         hours: Int,
         coins: Int,
         city: String,
-        place: String
+        place: String,
+        methodEvent: String,
+        roles: String,
+        age: String,
+        skills: String,
     ): Event?
 
     suspend fun insertEventPrefs(

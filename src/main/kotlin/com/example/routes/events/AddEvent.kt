@@ -23,6 +23,10 @@ fun Route.insertEvent(
         val prefs = parameters.prefs
         val city = parameters.city
         val place = parameters.place
+        val methodEvent = parameters.methodEvent
+        val roles = parameters.roles
+        val age = parameters.age
+        val skills = parameters.skills
 
         try {
             val newEvent = db.insertEvent(
@@ -32,7 +36,11 @@ fun Route.insertEvent(
                 hours = hours,
                 coins = coins,
                 city = city,
-                place = place
+                place = place,
+                methodEvent = methodEvent,
+                roles = roles,
+                age = age,
+                skills = skills
             )
             newEvent?.id?.let {
                 val event = EventResponse(
@@ -43,7 +51,11 @@ fun Route.insertEvent(
                     hours = hours,
                     coins = coins,
                     city = city,
-                    place = place
+                    place = place,
+                    methodEvent = methodEvent,
+                    roles = roles,
+                    age = age,
+                    skills = skills
                 )
                 call.respond(event)
             }

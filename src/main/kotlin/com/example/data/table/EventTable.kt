@@ -21,4 +21,8 @@ object Events: IntIdTable() {
     val coins: Column<Int> = integer("coins")
     val city: Column<String> = varchar("city",200)
     val place: Column<String> = varchar("place",200)
+    val methodEvent: Column<String> = varchar("methodEvent",100)
+    val roles: Column<String> = varchar("roles",900)
+    val age: Column<String> = varchar("age",100)
+    val skills: Column<String> = varchar("skills",900)
 }

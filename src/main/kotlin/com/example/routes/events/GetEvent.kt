@@ -14,7 +14,7 @@ fun Route.getEvent(db: Repository) {
         try {
             val eventDetailsFromDb = db.getEvent(eventDetails.id)
             eventDetailsFromDb.id.let {
-                val organization = EventResponse(
+                val event = EventResponse(
                     id = it,
                     description = eventDetailsFromDb.description,
                     dateTime = eventDetailsFromDb.dateTime,
@@ -22,9 +22,13 @@ fun Route.getEvent(db: Repository) {
                     hours = eventDetailsFromDb.hours,
                     coins = eventDetailsFromDb.coins,
                     city = eventDetailsFromDb.city,
-                    place = eventDetailsFromDb.place
+                    place = eventDetailsFromDb.place,
+                    methodEvent = eventDetailsFromDb.methodEvent,
+                    roles = eventDetailsFromDb.roles,
+                    age = eventDetailsFromDb.place,
+                    skills = eventDetailsFromDb.skills
                 )
-                call.respond(organization)
+                call.respond(event)
             }
         } catch (e: Throwable) {
             application.log.error("Failed to find event by id ${eventDetails.id}", e)

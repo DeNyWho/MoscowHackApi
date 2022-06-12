@@ -9,5 +9,9 @@ data class EventRequest(
     val coins: Int,
     val prefs: List<Int>,
     val city: String,
-    val place: String
+    val place: String,
+    val methodEvent: String,
+    val roles: String,
+    val age: String,
+    val skills: String,
 )
