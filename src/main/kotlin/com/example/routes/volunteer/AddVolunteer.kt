@@ -27,11 +27,7 @@ fun Route.insertVolunteer(
                 description = description,
                 phone = phone,
                 hours = hours,
-                coins = coins
-            )
-
-            db.insertVolunteerPrefs(
-                userId = id,
+                coins = coins,
                 prefs = prefs
             )
             call.respond(message = Status(status = 200, message = "Successfully"), status = HttpStatusCode.OK)

@@ -1,19 +1,14 @@
 package com.example.routes.organisation
 
-import com.example.authentication.ServerSession
 import com.example.data.request.OrganizationRequest
-import com.example.data.request.VolunteerRequest
-import com.example.data.response.AuthorizedUserResponse
 import com.example.data.response.ErrorResponse
 import com.example.data.response.OrganizationResponse
-import com.example.data.response.Status
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.sessions.*
 
 fun Route.insertOrganization(
     db: Repository
@@ -37,7 +32,7 @@ fun Route.insertOrganization(
             newOrganization?.id?.let {
                 val organization = OrganizationResponse(
                     id = it,
-                    userID = newOrganization.id,
+                    userID = id,
                     name = newOrganization.name,
                     email = newOrganization.email,
                     description = newOrganization.description,

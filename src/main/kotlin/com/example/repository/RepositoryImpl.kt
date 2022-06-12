@@ -67,6 +67,15 @@ class RepositoryImpl: Repository {
         return if (rowsUpdated > 0) getUser(userId) else null
     }
 
+    override suspend fun updateUserType(userId: Int, type: String): Boolean {
+        dbQuery {
+            UserTable.update({UserTable.id eq userId}) {
+                it[UserTable.type] = type
+            }
+        }
+        return true
+    }
+
     override suspend fun getPref(id: Int): List<PrefsUser> = dbQuery {
         VolunteersPrefs.select{ VolunteersPrefs.user eq id}.map { rowToPref(it) }.toList()
     }
@@ -94,7 +103,8 @@ class RepositoryImpl: Repository {
         description: String,
         phone: String,
         hours: Int,
-        coins: Int
+        coins: Int,
+        prefs: List<Int>
     ) {
         dbQuery {
             Volunteers.insert {
@@ -103,6 +113,15 @@ class RepositoryImpl: Repository {
                 it[Volunteers.phone] = phone
                 it[Volunteers.coins] = coins
                 it[Volunteers.hours] = hours
+            }
+            for(i in prefs.indices) {
+                VolunteersPrefs.insert {
+                    it[user] = userId
+                    it[pref] = prefs[i]
+                }
+            }
+            UserTable.update({UserTable.id eq userId}) {
+                it[type] = "Volunteer"
             }
         }
     }
@@ -122,6 +141,9 @@ class RepositoryImpl: Repository {
                 it[OrganizationTable.name] = name
                 it[OrganizationTable.description] = description
                 it[OrganizationTable.site] = site
+            }
+            UserTable.update({UserTable.id eq userId}) {
+                it[type] = "Organisation"
             }
         }
         return rowToOrganization(statement?.resultedValues?.get(0))
@@ -164,8 +186,18 @@ class RepositoryImpl: Repository {
         }
     }
 
+    override suspend fun deleteEvent(eventId: Int): Boolean = dbQuery {
+        EventsPrefs.deleteWhere{ EventsPrefs.event eq eventId}
+        Events.deleteWhere { Events.id eq eventId }
+        return@dbQuery true
+    }
+
     override suspend fun getEvents(): List<Event> = dbQuery {
         Events.selectAll().mapNotNull { rowToEvent(it) }
+    }
+
+    override suspend fun getEvent(id: Int): Event = dbQuery {
+        Events.select { Events.id eq id }.map { rowToEvent(it) }.single()
     }
 
     private fun rowToPrefs(row: ResultRow?): PrefCommon?{
@@ -199,6 +231,7 @@ class RepositoryImpl: Repository {
             pref = row[VolunteersPrefs.pref].value
         )
     }
+
     private fun rowToOrganization(row: ResultRow?): Organization? {
         if(row == null){
             return null
@@ -212,6 +245,7 @@ class RepositoryImpl: Repository {
             site = row[OrganizationTable.site]
         )
     }
+
 
     private fun rowToUser(row: ResultRow?): User? {
         if (row == null) {

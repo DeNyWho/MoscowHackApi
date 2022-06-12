@@ -10,6 +10,7 @@ object UsersRoute {
     const val USER_REGISTER = "$USERS/registration"
     const val USER_DETAILS = "$USERS/{id}"
     const val USER_UPDATE = "$USERS/update"
+    const val USER_UPDATE_TYPE = "$USERS/updateType/{id}"
     const val USERS_AVAILABLE = USERS
 
     @Location(USER_LOGIN)
@@ -20,6 +21,9 @@ object UsersRoute {
 
     @Location(USER_DETAILS)
     data class UserDetailsRoute(val id: Int)
+
+    @Location(USER_UPDATE_TYPE)
+    data class UserUpdateTypeRoute(val id: Int)
 
     @Location(USER_UPDATE)
     class UserUpdateRoute

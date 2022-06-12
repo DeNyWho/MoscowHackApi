@@ -34,6 +34,11 @@ interface Repository {
         type: String
     ): User?
 
+    suspend fun updateUserType(
+        userId: Int,
+        type: String
+    ): Boolean
+
 
     suspend fun getPref(
         id: Int
@@ -55,7 +60,8 @@ interface Repository {
         description: String,
         phone: String,
         hours: Int,
-        coins: Int
+        coins: Int,
+        prefs: List<Int>
     )
     suspend fun insertOrganization(
         userId: Int,
@@ -82,7 +88,13 @@ interface Repository {
         prefs: List<Int>
     )
 
+    suspend fun deleteEvent(
+        eventId: Int
+    ): Boolean
+
     suspend fun getEvents(): List<Event>
+
+    suspend fun getEvent(id: Int): Event
 
 
 }

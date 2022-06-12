@@ -1,17 +1,31 @@
 package com.example.routes.events
 
+import com.example.data.response.EventResponse
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.locations.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.getEvents(db: Repository) {
-    get(EventRoute.events) {
+@OptIn(KtorExperimentalLocationsAPI::class)
+fun Route.getEvent(db: Repository) {
+    get<EventRoute.EventDetailsRoute> { eventDetails ->
         try {
-            val eventsFromDb = db.getEvents()
-            call.respond(eventsFromDb)
+            val eventDetailsFromDb = db.getEvent(eventDetails.id)
+            eventDetailsFromDb.id.let {
+                val organization = EventResponse(
+                    id = it,
+                    description = eventDetailsFromDb.description,
+                    dateTime = eventDetailsFromDb.dateTime,
+                    creator = eventDetailsFromDb.creator,
+                    hours = eventDetailsFromDb.hours,
+                    coins = eventDetailsFromDb.coins
+                )
+                call.respond(organization)
+            }
         } catch (e: Throwable) {
+            application.log.error("Failed to find event by id ${eventDetails.id}", e)
             call.respond(HttpStatusCode(400, "Failed to execute request (exception ${e.localizedMessage})"))
         }
     }

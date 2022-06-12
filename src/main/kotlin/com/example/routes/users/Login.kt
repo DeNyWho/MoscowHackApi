@@ -4,13 +4,13 @@ import com.example.authentication.JwtService
 import com.example.authentication.ServerSession
 import com.example.data.model.LoginRequest
 import com.example.data.response.AuthorizedUserResponse
+import com.example.data.response.ErrorResponse
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.routing.application
 import io.ktor.server.sessions.*
 
 fun Route.login(
@@ -39,7 +39,7 @@ fun Route.login(
                     call.sessions.set(ServerSession(it))
                     call.respond(authorizedUser)
                 } else {
-                    call.respond(HttpStatusCode(403, "Wrong password"))
+                    call.respond(message = ErrorResponse(errorCode = 403, message = "Wrong password"), status = HttpStatusCode.BadRequest)
                 }
             } ?: call.respond(HttpStatusCode(404, "User not found"))
         } catch (e: Throwable) {

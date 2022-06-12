@@ -4,6 +4,8 @@ import com.example.authentication.JwtService
 import com.example.authentication.hash
 import com.example.repository.DatabaseFactory
 import com.example.repository.RepositoryImpl
+import com.example.routes.events.deleteEvent
+import com.example.routes.events.getEvent
 import com.example.routes.events.getEvents
 import com.example.routes.events.insertEvent
 import com.example.routes.organisation.getOrganization
@@ -40,6 +42,7 @@ fun Application.configureRouting() {
         getUser(db)
         updateUser(db, jwtService, hashFunction)
         getUsers(db)
+        updateUserType(db)
 
         // Prefs Routes
         setPrefs()
@@ -56,7 +59,8 @@ fun Application.configureRouting() {
         insertEvent(db)
         getEvents(db)
         getEventPref(db)
-
+        getEvent(db)
+        deleteEvent(db)
 
     }
 
