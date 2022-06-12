@@ -1,5 +1,6 @@
 package com.example.repository
 
+import com.example.data.table.EventsPrefs
 import com.example.data.table.OrganizationTable
 import com.example.data.table.UserTable
 import com.example.data.table.VolunteersPrefs
@@ -20,6 +21,7 @@ object DatabaseFactory {
             SchemaUtils.create(UserTable)
             SchemaUtils.create(VolunteersPrefs)
             SchemaUtils.create(OrganizationTable)
+            SchemaUtils.create(EventsPrefs)
         }
     }
 

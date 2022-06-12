@@ -1,13 +1,10 @@
 package com.example.repository
 
 import com.example.data.model.User
+import com.example.data.model.event.Event
 import com.example.data.model.organization.Organization
 import com.example.data.model.prefs.PrefCommon
 import com.example.data.model.prefs.PrefsUser
-import com.example.data.table.OrganizationTable
-import com.example.data.table.OrganizationTable.uniqueIndex
-import com.example.data.table.Prefs
-import org.jetbrains.exposed.sql.Column
 
 interface Repository {
 
@@ -42,6 +39,10 @@ interface Repository {
         id: Int
     ): List<PrefsUser>
 
+    suspend fun getEventPref(
+        id: Int
+    ): List<PrefsUser>
+
     suspend fun getPrefs(): List<PrefCommon?>
 
     suspend fun insertVolunteerPrefs(
@@ -67,5 +68,21 @@ interface Repository {
     suspend fun getOrganizations(): List<Organization>
 
     suspend fun getOrganizationById(id: Int): Organization?
+
+    suspend fun insertEvent(
+        description: String,
+        dateTime: String,
+        creator: Int,
+        hours: Int,
+        coins: Int
+    ): Event?
+
+    suspend fun insertEventPrefs(
+        eventId: Int,
+        prefs: List<Int>
+    )
+
+    suspend fun getEvents(): List<Event>
+
 
 }

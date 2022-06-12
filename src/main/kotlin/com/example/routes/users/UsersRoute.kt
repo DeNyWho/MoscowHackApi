@@ -9,7 +9,7 @@ object UsersRoute {
     const val USER_LOGIN = "$USERS/login"
     const val USER_REGISTER = "$USERS/registration"
     const val USER_DETAILS = "$USERS/{id}"
-    const val USER_UPDATE = USERS
+    const val USER_UPDATE = "$USERS/update"
     const val USERS_AVAILABLE = USERS
 
     @Location(USER_LOGIN)

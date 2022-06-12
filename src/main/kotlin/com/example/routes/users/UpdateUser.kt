@@ -37,7 +37,7 @@ fun Route.updateUser(
                 return@put call.respond(HttpStatusCode(413, "Missing password"))
             }
 
-            val oldHash = password?.let { hashFunction(it) }
+            val oldHash = password.let { hashFunction(it) }
             val newHash = newPassword?.let { hashFunction(it) }!!
             try {
                 val userFromDb = db.getUser(user.id)

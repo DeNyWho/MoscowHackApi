@@ -1,6 +1,7 @@
 package com.example.repository
 
 import com.example.data.model.User
+import com.example.data.model.event.Event
 import com.example.data.model.organization.Organization
 import com.example.data.model.prefs.PrefCommon
 import com.example.data.model.prefs.PrefsUser
@@ -8,7 +9,6 @@ import com.example.data.table.*
 import com.example.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.jetbrains.exposed.sql.transactions.transaction
 
 class RepositoryImpl: Repository {
     override suspend fun checkEmailAvailable(email: String): Boolean = dbQuery {
@@ -71,6 +71,10 @@ class RepositoryImpl: Repository {
         VolunteersPrefs.select{ VolunteersPrefs.user eq id}.map { rowToPref(it) }.toList()
     }
 
+    override suspend fun getEventPref(id: Int): List<PrefsUser> = dbQuery {
+        EventsPrefs.select{ EventsPrefs.event eq id}.map { rowToEventPrefs(it) }.toList()
+    }
+
     override suspend fun getPrefs(): List<PrefCommon?> = dbQuery {
         Prefs.selectAll().map { rowToPrefs(it) }
     }
@@ -131,12 +135,62 @@ class RepositoryImpl: Repository {
         OrganizationTable.select { OrganizationTable.id eq id }.map { rowToOrganization(it) }.singleOrNull()
     }
 
+    override suspend fun insertEvent(
+        description: String,
+        dateTime: String,
+        creator: Int,
+        hours: Int,
+        coins: Int
+    ): Event {
+        var statement: InsertStatement<Number>? = null
+        dbQuery {
+            statement =  Events.insert {
+                it[Events.description] = description
+                it[Events.dateTime] = dateTime
+                it[Events.creator] = creator
+                it[Events.hours] = hours
+                it[Events.coins] = coins
+            }
+        }
+        return rowToEvent(statement?.resultedValues?.get(0)!!)
+    }
+
+    override suspend fun insertEventPrefs(eventId: Int, prefs: List<Int>) = dbQuery {
+        for(i in prefs.indices) {
+            EventsPrefs.insert {
+                it[event] = eventId
+                it[pref] = prefs[i]
+            }
+        }
+    }
+
+    override suspend fun getEvents(): List<Event> = dbQuery {
+        Events.selectAll().mapNotNull { rowToEvent(it) }
+    }
+
     private fun rowToPrefs(row: ResultRow?): PrefCommon?{
         if(row == null){
             return null
         }
         return PrefCommon(
             name = row[Prefs.name]
+        )
+    }
+
+    private fun rowToEventPrefs(row: ResultRow): PrefsUser{
+        return PrefsUser(
+            pref = row[EventsPrefs.pref].value
+        )
+    }
+
+    private fun rowToEvent(row: ResultRow): Event {
+        return Event(
+            id = row[Events.id].value,
+            description = row[Events.description],
+            dateTime = row[Events.dateTime],
+            creator = row[Events.creator],
+            hours = row[Events.hours],
+            coins = row[Events.coins]
         )
     }
 
