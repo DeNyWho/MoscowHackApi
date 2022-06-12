@@ -24,6 +24,7 @@ import com.example.routes.users.*
 import com.example.routes.volunteer.getVolunteerById
 import com.example.routes.volunteer.getVolunteers
 import com.example.routes.volunteer.insertVolunteer
+import com.example.routes.volunteer.updateCoinsToVolunteer
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.locations.*
@@ -80,6 +81,7 @@ fun Application.configureRouting() {
         insertVolunteer(db)
         getVolunteers(db)
         getVolunteerById(db)
+        updateCoinsToVolunteer(db)
 
         //transactions
         getTransactionById(db)

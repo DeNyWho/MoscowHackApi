@@ -1,8 +1,8 @@
 package com.example.data.model.volunteer
 
 import io.ktor.server.auth.*
-@kotlinx.serialization.Serializable
 
+@kotlinx.serialization.Serializable
 data class Volunteer(
     val id: Int,
     val userId: Int,

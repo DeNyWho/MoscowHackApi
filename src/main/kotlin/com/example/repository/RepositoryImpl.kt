@@ -137,6 +137,21 @@ class RepositoryImpl: Repository {
         Volunteers.select { Volunteers.id eq volunteerID }.map { rowToVolunteer(it) }.singleOrNull()
     }
 
+    override suspend fun updateCoins(volunteerID: Int, coins: Int, option: String): Boolean {
+        dbQuery {
+            val volunteerOld = Volunteers.select { Volunteers.id eq volunteerID }.map { rowToVolunteer(it) }.singleOrNull()!!
+            Volunteers.update({Volunteers.id eq volunteerID}) {
+                if(option == "plus") {
+                    it[Volunteers.coins] = volunteerOld.coins + coins
+                }
+                else {
+                    it[Volunteers.coins] = volunteerOld.coins - coins
+
+                }
+            }
+        }
+        return true
+    }
 
     override suspend fun insertOrganization(
         userId: Int,

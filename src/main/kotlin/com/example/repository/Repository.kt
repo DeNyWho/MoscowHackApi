@@ -71,6 +71,11 @@ interface Repository {
 
     suspend fun getVolunteerById(volunteerID: Int): Volunteer?
 
+    suspend fun updateCoins(
+        volunteerID: Int,
+        coins: Int,
+        option: String
+    ): Boolean
 
     suspend fun insertOrganization(
         userId: Int,
