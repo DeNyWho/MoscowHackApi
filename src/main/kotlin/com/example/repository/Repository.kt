@@ -5,6 +5,7 @@ import com.example.data.model.organization.Organization
 import com.example.data.model.prefs.PrefCommon
 import com.example.data.model.prefs.PrefsUser
 import com.example.data.model.submission.Submission
+import com.example.data.model.transactions.Transactions
 import com.example.data.model.user.User
 import com.example.data.model.volunteer.Volunteer
 
@@ -134,5 +135,22 @@ interface Repository {
     ): Boolean
 
 
+
+    suspend fun insertTransaction(
+        coins: Int,
+        hours: Int,
+        description: String,
+        from: Int,
+        to: Int,
+        event: Int
+    ): Transactions?
+
+    suspend fun getTransaction(): List<Transactions>
+
+    suspend fun getTransactionById(transactionID: Int): Transactions?
+
+    suspend fun deleteTransaction(
+        transactionID: Int
+    ): Boolean
 
 }

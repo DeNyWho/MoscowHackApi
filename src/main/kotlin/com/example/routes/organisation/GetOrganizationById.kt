@@ -29,7 +29,7 @@ fun Route.getOrganization(db: Repository) {
                 status = HttpStatusCode.BadRequest
             )
         } catch (e: Throwable) {
-            application.log.error("Failed to find user by id ${organizationDetails.id}", e)
+            application.log.error("Failed to find organization by id ${organizationDetails.id}", e)
             call.respond(HttpStatusCode(400, "Failed to execute request (exception ${e.localizedMessage})"))
         }
     }

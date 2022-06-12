@@ -5,6 +5,7 @@ import com.example.data.model.organization.Organization
 import com.example.data.model.prefs.PrefCommon
 import com.example.data.model.prefs.PrefsUser
 import com.example.data.model.submission.Submission
+import com.example.data.model.transactions.Transactions
 import com.example.data.model.user.User
 import com.example.data.model.volunteer.Volunteer
 import com.example.data.table.*
@@ -269,6 +270,43 @@ class RepositoryImpl: Repository {
         return true
     }
 
+    override suspend fun insertTransaction(
+        coins: Int,
+        hours: Int,
+        description: String,
+        from: Int,
+        to: Int,
+        event: Int
+    ): Transactions? {
+        var statement: InsertStatement<Number>? = null
+        dbQuery {
+            statement =  TransactionTable.insert {
+                it[TransactionTable.coins] = coins
+                it[TransactionTable.hours] = hours
+                it[TransactionTable.description] = description
+                it[TransactionTable.from] = from
+                it[TransactionTable.to] = to
+                it[TransactionTable.event] = event
+            }
+        }
+        return rowToTransaction(statement?.resultedValues?.get(0))
+    }
+
+
+    override suspend fun getTransaction(): List<Transactions> = dbQuery {
+        TransactionTable.selectAll().mapNotNull { rowToTransaction(it) }
+    }
+
+    override suspend fun getTransactionById(transactionID: Int): Transactions? = dbQuery {
+        TransactionTable.select { TransactionTable.id eq transactionID }.map { rowToTransaction(it) }.singleOrNull()
+    }
+
+
+    override suspend fun deleteTransaction(transactionID: Int): Boolean = dbQuery {
+        TransactionTable.deleteWhere { TransactionTable.id eq transactionID }
+        return@dbQuery true
+    }
+
     private fun rowToVolunteer(row: ResultRow?): Volunteer? {
         if(row == null){
             return null
@@ -298,6 +336,20 @@ class RepositoryImpl: Repository {
         )
     }
 
+    private fun rowToTransaction(row: ResultRow?): Transactions?{
+        if(row == null){
+            return null
+        }
+        return Transactions(
+            id = row[TransactionTable.id],
+            coins = row[TransactionTable.coins],
+            hours = row[TransactionTable.hours],
+            description = row[TransactionTable.description],
+            from = row[TransactionTable.from],
+            to = row[TransactionTable.to],
+            event = row[TransactionTable.event]
+        )
+    }
 
     private fun rowToPrefs(row: ResultRow?): PrefCommon?{
         if(row == null){

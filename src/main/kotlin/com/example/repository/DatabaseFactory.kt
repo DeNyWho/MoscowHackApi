@@ -20,6 +20,7 @@ object DatabaseFactory {
             SchemaUtils.create(OrganizationTable)
             SchemaUtils.create(EventsPrefs)
             SchemaUtils.create(SubmissionTable)
+            SchemaUtils.create(TransactionTable)
         }
     }
 

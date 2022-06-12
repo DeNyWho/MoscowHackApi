@@ -30,7 +30,7 @@ fun Route.getSubmissionById(db: Repository) {
                 status = HttpStatusCode.BadRequest
             )
         } catch (e: Throwable) {
-            application.log.error("Failed to find user by id ${submissionDetails.id}", e)
+            application.log.error("Failed to find submission by id ${submissionDetails.id}", e)
             call.respond(HttpStatusCode(400, "Failed to execute request (exception ${e.localizedMessage})"))
         }
     }

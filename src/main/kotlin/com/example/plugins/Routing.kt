@@ -16,6 +16,10 @@ import com.example.routes.prefs.getPrefs
 import com.example.routes.prefs.getVolunteerPrefs
 import com.example.routes.prefs.setPrefs
 import com.example.routes.submission.*
+import com.example.routes.transactions.deleteTransaction
+import com.example.routes.transactions.getTransactionById
+import com.example.routes.transactions.getTransactions
+import com.example.routes.transactions.insertTransactions
 import com.example.routes.users.*
 import com.example.routes.volunteer.getVolunteerById
 import com.example.routes.volunteer.getVolunteers
@@ -76,6 +80,12 @@ fun Application.configureRouting() {
         insertVolunteer(db)
         getVolunteers(db)
         getVolunteerById(db)
+
+        //transactions
+        getTransactionById(db)
+        getTransactions(db)
+        insertTransactions(db)
+        deleteTransaction(db)
     }
 
 }
