@@ -3,6 +3,7 @@ package com.example.routes.volunteer
 import com.example.data.model.request.VolunteerRequest
 import com.example.data.model.response.ErrorResponse
 import com.example.data.model.response.Status
+import com.example.data.model.response.VolunteerResponse
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -23,6 +24,10 @@ fun Route.insertVolunteer(
             val hours = parameters.hours
             val phone = parameters.phone
 
+            if (!db.checkVolunteerOk(id)) {
+                call.respond(message = ErrorResponse(errorCode = 400, message = "Already added"), status = HttpStatusCode.BadRequest)
+            } else {
+
             val newVolunteer = db.insertVolunteer(
                 userId = id,
                 description = description,
@@ -30,20 +35,22 @@ fun Route.insertVolunteer(
                 hours = hours,
                 coins = coins
             )
-            if (newVolunteer == null){
-                call.respond(
-                    message = ErrorResponse(errorCode = 400, message = "Already added"),
-                    status = HttpStatusCode.BadRequest
+            newVolunteer?.userId?.let {
+                val volunteer = VolunteerResponse(
+                    id = newVolunteer.id,
+                    userID = it,
+                    description = newVolunteer.description,
+                    phone = newVolunteer.phone,
+                    hours = newVolunteer.hours,
+                    coins = newVolunteer.coins
                 )
-            }
-            else {
                 db.insertVolunteerPrefs(
                     userId = newVolunteer.id,
                     prefs = prefs
                 )
-                call.respond(newVolunteer)
+                call.respond(volunteer)
             }
-            call.respond(message = Status(status = 200, message = "Successfully"), status = HttpStatusCode.OK)
+            } ?:  call.respond(message = ErrorResponse(errorCode = 400, message = "Already added"), status = HttpStatusCode.BadRequest)
         } catch (e: Exception){
             call.respond(message = Status(status = 400, message = "${e.message}"), status = HttpStatusCode.BadRequest)
         }

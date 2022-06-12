@@ -39,7 +39,7 @@ fun Route.login(
                     call.sessions.set(ServerSession(it))
                     call.respond(authorizedUser)
                 } else {
-                    call.respond(message = ErrorResponse(errorCode = 403, message = "Wrong password"), status = HttpStatusCode.BadRequest)
+                    call.respond(message = ErrorResponse(errorCode = 403, message = "Wrong password"), status = HttpStatusCode.Forbidden)
                 }
             } ?: call.respond(HttpStatusCode(404, "User not found"))
         } catch (e: Throwable) {

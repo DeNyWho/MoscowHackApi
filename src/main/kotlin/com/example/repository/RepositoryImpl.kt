@@ -18,6 +18,14 @@ class RepositoryImpl: Repository {
         UserTable.select { UserTable.email eq email }.map { rowToUser(it) }.isNullOrEmpty()
     }
 
+    override suspend fun checkVolunteerOk(userID: Int): Boolean = dbQuery {
+        Volunteers.select { Volunteers.userID eq userID }.map { rowToVolunteer(it) }.isNullOrEmpty()
+    }
+
+    override suspend fun checkOrganizationOk(userID: Int): Boolean = dbQuery {
+        OrganizationTable.select { OrganizationTable.userID eq userID }.map { rowToOrganization(it) }.isNullOrEmpty()
+    }
+
     override suspend fun createUser(
         email: String,
         passwordHash: String,
@@ -130,7 +138,7 @@ class RepositoryImpl: Repository {
     }
 
     override suspend fun getVolunteerById(volunteerID: Int): Volunteer? = dbQuery {
-        Volunteers.select { Volunteers.id eq volunteerID }.map { rowToVolunteer(it) }.singleOrNull()
+        Volunteers.select { Volunteers.userID eq volunteerID }.map { rowToVolunteer(it) }.singleOrNull()
     }
 
     override suspend fun updateCoins(volunteerID: Int, coins: Int, option: String): Boolean {
@@ -177,7 +185,7 @@ class RepositoryImpl: Repository {
     }
 
     override suspend fun getOrganizationById(id: Int): Organization? = dbQuery {
-        OrganizationTable.select { OrganizationTable.id eq id }.map { rowToOrganization(it) }.singleOrNull()
+        OrganizationTable.select { OrganizationTable.userID eq id }.map { rowToOrganization(it) }.singleOrNull()
     }
 
     override suspend fun insertEvent(

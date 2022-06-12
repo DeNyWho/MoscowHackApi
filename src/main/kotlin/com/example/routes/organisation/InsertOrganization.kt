@@ -22,23 +22,28 @@ fun Route.insertOrganization(
         val site = parameters.site
 
         try {
-            val newOrganization = db.insertOrganization(
-                userId = id,
-                email = email,
-                name = name,
-                description = description,
-                site = site
-            )
-            newOrganization?.id?.let {
-                val organization = OrganizationResponse(
-                    id = it,
-                    userID = id,
-                    name = newOrganization.name,
-                    email = newOrganization.email,
-                    description = newOrganization.description,
-                    site = newOrganization.site
+            if (!db.checkOrganizationOk(id)) {
+                call.respond(message = ErrorResponse(errorCode = 400, message = "Already added"), status = HttpStatusCode.BadRequest)
+            } else {
+                val newOrganization = db.insertOrganization(
+                    userId = id,
+                    email = email,
+                    name = name,
+                    description = description,
+                    site = site
                 )
-                call.respond(organization)
+
+                newOrganization?.id?.let {
+                    val organization = OrganizationResponse(
+                        id = it,
+                        userID = id,
+                        name = newOrganization.name,
+                        email = newOrganization.email,
+                        description = newOrganization.description,
+                        site = newOrganization.site
+                    )
+                    call.respond(organization)
+                }
             } ?: call.respond(
                 message = ErrorResponse(errorCode = 400, message = "Already added"),
                 status = HttpStatusCode.BadRequest

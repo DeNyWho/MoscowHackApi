@@ -14,6 +14,10 @@ interface Repository {
     // users
     suspend fun checkEmailAvailable(email: String): Boolean
 
+    suspend fun checkVolunteerOk(userID: Int): Boolean
+
+    suspend fun checkOrganizationOk(userID: Int): Boolean
+
     suspend fun createUser(
         email: String,
         passwordHash: String,
