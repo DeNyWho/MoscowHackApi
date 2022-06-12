@@ -2,10 +2,13 @@ package com.example.repository
 
 import com.example.data.model.User
 import com.example.data.model.organization.Organization
+import com.example.data.model.prefs.PrefCommon
+import com.example.data.model.prefs.PrefsUser
 import com.example.data.table.*
 import com.example.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.sql.transactions.transaction
 
 class RepositoryImpl: Repository {
     override suspend fun checkEmailAvailable(email: String): Boolean = dbQuery {
@@ -64,6 +67,15 @@ class RepositoryImpl: Repository {
         return if (rowsUpdated > 0) getUser(userId) else null
     }
 
+    override suspend fun getPref(id: Int): List<PrefsUser> = dbQuery {
+        VolunteersPrefs.select{ VolunteersPrefs.user eq id}.map { rowToPref(it) }.toList()
+    }
+
+    override suspend fun getPrefs(): List<PrefCommon?> = dbQuery {
+        Prefs.selectAll().map { rowToPrefs(it) }
+    }
+
+
     override suspend fun insertVolunteerPrefs(userId: Int, prefs: List<Int>) = dbQuery {
         for(i in prefs.indices) {
             VolunteersPrefs.insert {
@@ -111,14 +123,28 @@ class RepositoryImpl: Repository {
         return rowToOrganization(statement?.resultedValues?.get(0))
     }
 
-    override suspend fun getOrganizations(): List<Organization> {
-        TODO("Not yet implemented")
+    override suspend fun getOrganizations(): List<Organization> = dbQuery {
+        OrganizationTable.selectAll().mapNotNull { rowToOrganization(it) }
     }
 
     override suspend fun getOrganizationById(id: Int): Organization? = dbQuery {
         OrganizationTable.select { OrganizationTable.id eq id }.map { rowToOrganization(it) }.singleOrNull()
     }
 
+    private fun rowToPrefs(row: ResultRow?): PrefCommon?{
+        if(row == null){
+            return null
+        }
+        return PrefCommon(
+            name = row[Prefs.name]
+        )
+    }
+
+    private fun rowToPref(row: ResultRow): PrefsUser {
+        return PrefsUser(
+            pref = row[VolunteersPrefs.pref].value
+        )
+    }
     private fun rowToOrganization(row: ResultRow?): Organization? {
         if(row == null){
             return null

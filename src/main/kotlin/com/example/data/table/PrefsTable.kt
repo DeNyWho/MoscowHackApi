@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.Table
 object Prefs: IntIdTable() {
     val name = varchar("name", 50)
 }
+
 class Pref(id: EntityID<Int>): IntEntity(id) {
     companion object : IntEntityClass<Pref>(Prefs)
     var name by Prefs.name

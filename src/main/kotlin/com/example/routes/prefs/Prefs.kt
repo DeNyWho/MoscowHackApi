@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 import org.jetbrains.exposed.sql.insert
 
 fun Route.setPrefs() {
-    post("/prefs") {
+    post("/prefs/insert") {
         try {
             DatabaseFactory.dbQuery {
                 Prefs.insert {
