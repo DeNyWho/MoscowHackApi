@@ -9,5 +9,7 @@ data class Event(
     val dateTime: String,
     val creator: Int,
     val hours: Int,
-    val coins: Int
+    val coins: Int,
+    val city: String,
+    val place: String
 ): Principal

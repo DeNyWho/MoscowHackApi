@@ -2,9 +2,9 @@ package com.example.routes.users
 
 import com.example.authentication.JwtService
 import com.example.authentication.ServerSession
-import com.example.data.model.LoginRequest
-import com.example.data.response.AuthorizedUserResponse
-import com.example.data.response.ErrorResponse
+import com.example.data.model.request.LoginRequest
+import com.example.data.model.response.AuthorizedUserResponse
+import com.example.data.model.response.ErrorResponse
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*

@@ -1,8 +1,8 @@
 package com.example.routes.events
 
-import com.example.data.request.EventRequest
-import com.example.data.response.ErrorResponse
-import com.example.data.response.EventResponse
+import com.example.data.model.request.EventRequest
+import com.example.data.model.response.ErrorResponse
+import com.example.data.model.response.EventResponse
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -21,6 +21,8 @@ fun Route.insertEvent(
         val hours = parameters.hours
         val coins = parameters.coins
         val prefs = parameters.prefs
+        val city = parameters.city
+        val place = parameters.place
 
         try {
             val newEvent = db.insertEvent(
@@ -28,7 +30,9 @@ fun Route.insertEvent(
                 dateTime = dateTime,
                 creator = creator,
                 hours = hours,
-                coins = coins
+                coins = coins,
+                city = city,
+                place = place
             )
             newEvent?.id?.let {
                 val event = EventResponse(
@@ -37,7 +41,9 @@ fun Route.insertEvent(
                     dateTime = dateTime,
                     creator = creator,
                     hours = hours,
-                    coins = coins
+                    coins = coins,
+                    city = city,
+                    place = place
                 )
                 call.respond(event)
             }

@@ -1,7 +1,7 @@
 package com.example.routes.organisation
 
-import com.example.data.response.ErrorResponse
-import com.example.data.response.OrganizationResponse
+import com.example.data.model.response.ErrorResponse
+import com.example.data.model.response.OrganizationResponse
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*

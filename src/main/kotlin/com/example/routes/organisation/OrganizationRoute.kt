@@ -1,6 +1,5 @@
 package com.example.routes.organisation
 
-import com.example.routes.users.UsersRoute
 import io.ktor.server.locations.*
 
 object OrganizationRoute {
@@ -10,4 +9,5 @@ object OrganizationRoute {
 
     @Location(ORGANIZATION_BY_ID)
     data class OrganizationDetailsRoute(val id: Int)
+
 }

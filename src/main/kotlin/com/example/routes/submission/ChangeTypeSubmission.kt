@@ -1,6 +1,6 @@
 package com.example.routes.submission
 
-import com.example.data.model.common.Status
+import com.example.data.model.common.Type
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -11,17 +11,17 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 @OptIn(KtorExperimentalLocationsAPI::class)
-fun Route.updateSubmissionStatus(db: Repository) {
-    post<SubmissionRoute.SubmissionStatusRoute> { status ->
+fun Route.updateSubmissionType(db: Repository) {
+    post<SubmissionRoute.SubmissionTypeRoute> { type ->
         try {
-            val param = call.receive<Status>()
+            val param = call.receive<Type>()
 
-            val response = db.updateSubmissionStatus(status.id, param.status)
+            val response = db.updateSubmissionType(type.id, param.type)
             if (response) {
                 call.respond("Successfully")
             }
         } catch (e: Throwable) {
-            application.log.error("Failed to find user by id ${status.id}", e)
+            application.log.error("Failed to find user by id ${type.id}", e)
             call.respond(HttpStatusCode(400, "Failed to execute request (exception ${e.localizedMessage})"))
         }
     }

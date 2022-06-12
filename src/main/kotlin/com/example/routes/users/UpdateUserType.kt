@@ -1,6 +1,6 @@
 package com.example.routes.users
 
-import com.example.data.model.Type
+import com.example.data.model.common.Type
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*

@@ -1,4 +1,4 @@
-package com.example.data.response
+package com.example.data.model.response
 
 @kotlinx.serialization.Serializable
 data class EventResponse(
@@ -7,5 +7,7 @@ data class EventResponse(
     val dateTime: String,
     val creator: Int,
     val hours: Int,
-    val coins: Int
+    val coins: Int,
+    val city: String,
+    val place: String
 )

@@ -1,11 +1,11 @@
-package com.example.data.response
+package com.example.data.model.request
 
 @kotlinx.serialization.Serializable
-data class AuthorizedUserResponse(
-    val id: Int?,
+data class UpdateUserRequest(
     val name: String,
     val secondName: String,
     val email: String,
     val type: String,
-    val accessToken: String
+    val password: String,
+    val newPassword: String?
 )

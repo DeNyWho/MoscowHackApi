@@ -1,6 +1,6 @@
 package com.example.routes.events
 
-import com.example.data.response.EventResponse
+import com.example.data.model.response.EventResponse
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -20,7 +20,9 @@ fun Route.getEvent(db: Repository) {
                     dateTime = eventDetailsFromDb.dateTime,
                     creator = eventDetailsFromDb.creator,
                     hours = eventDetailsFromDb.hours,
-                    coins = eventDetailsFromDb.coins
+                    coins = eventDetailsFromDb.coins,
+                    city = eventDetailsFromDb.city,
+                    place = eventDetailsFromDb.place
                 )
                 call.respond(organization)
             }

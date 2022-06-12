@@ -1,7 +1,7 @@
 package com.example.routes.users
 
-import com.example.data.model.UserResponse
-import com.example.data.response.ErrorResponse
+import com.example.data.model.response.UserResponse
+import com.example.data.model.response.ErrorResponse
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*

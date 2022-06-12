@@ -1,7 +1,7 @@
 package com.example.routes.volunteer
 
-import com.example.data.request.VolunteerRequest
-import com.example.data.response.Status
+import com.example.data.model.request.VolunteerRequest
+import com.example.data.model.response.Status
 import com.example.repository.Repository
 import io.ktor.http.*
 import io.ktor.server.application.*

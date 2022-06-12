@@ -1,10 +1,11 @@
 package com.example.repository
 
-import com.example.data.model.User
 import com.example.data.model.event.Event
 import com.example.data.model.organization.Organization
 import com.example.data.model.prefs.PrefCommon
 import com.example.data.model.prefs.PrefsUser
+import com.example.data.model.submission.Submission
+import com.example.data.model.user.User
 
 interface Repository {
 
@@ -80,7 +81,9 @@ interface Repository {
         dateTime: String,
         creator: Int,
         hours: Int,
-        coins: Int
+        coins: Int,
+        city: String,
+        place: String
     ): Event?
 
     suspend fun insertEventPrefs(
@@ -95,6 +98,34 @@ interface Repository {
     suspend fun getEvents(): List<Event>
 
     suspend fun getEvent(id: Int): Event
+
+    suspend fun insertSubmission(
+        eventID: Int,
+        userFrom: Int,
+        userTo: Int,
+        letter: String,
+        type: String,
+        status: String
+    ): Submission?
+
+    suspend fun getSubmissionById(id: Int): Submission?
+
+    suspend fun getSubmissions(): List<Submission>
+
+    suspend fun deleteSubmission(
+        submissionId: Int
+    ): Boolean
+
+    suspend fun updateSubmissionStatus(
+        submissionId: Int,
+        status: String
+    ): Boolean
+
+    suspend fun updateSubmissionType(
+        submissionId: Int,
+        type: String
+    ): Boolean
+
 
 
 }

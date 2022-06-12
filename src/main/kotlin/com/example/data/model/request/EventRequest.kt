@@ -1,4 +1,4 @@
-package com.example.data.request
+package com.example.data.model.request
 
 @kotlinx.serialization.Serializable
 data class EventRequest(
@@ -7,5 +7,7 @@ data class EventRequest(
     val creator: Int,
     val hours: Int,
     val coins: Int,
-    val prefs: List<Int>
+    val prefs: List<Int>,
+    val city: String,
+    val place: String
 )

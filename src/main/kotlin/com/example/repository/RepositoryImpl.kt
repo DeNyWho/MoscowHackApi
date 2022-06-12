@@ -1,10 +1,11 @@
 package com.example.repository
 
-import com.example.data.model.User
 import com.example.data.model.event.Event
 import com.example.data.model.organization.Organization
 import com.example.data.model.prefs.PrefCommon
 import com.example.data.model.prefs.PrefsUser
+import com.example.data.model.submission.Submission
+import com.example.data.model.user.User
 import com.example.data.table.*
 import com.example.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
@@ -162,7 +163,9 @@ class RepositoryImpl: Repository {
         dateTime: String,
         creator: Int,
         hours: Int,
-        coins: Int
+        coins: Int,
+        city: String,
+        place: String
     ): Event {
         var statement: InsertStatement<Number>? = null
         dbQuery {
@@ -172,6 +175,8 @@ class RepositoryImpl: Repository {
                 it[Events.creator] = creator
                 it[Events.hours] = hours
                 it[Events.coins] = coins
+                it[Events.city] = city
+                it[Events.place] = place
             }
         }
         return rowToEvent(statement?.resultedValues?.get(0)!!)
@@ -200,6 +205,76 @@ class RepositoryImpl: Repository {
         Events.select { Events.id eq id }.map { rowToEvent(it) }.single()
     }
 
+    override suspend fun insertSubmission(
+        eventID: Int,
+        userFrom: Int,
+        userTo: Int,
+        letter: String,
+        type: String,
+        status: String
+    ): Submission? {
+        var statement: InsertStatement<Number>? = null
+        dbQuery {
+            statement =  SubmissionTable.insert {
+                it[SubmissionTable.eventID] = eventID
+                it[SubmissionTable.userFrom] = userFrom
+                it[SubmissionTable.userTo] = userTo
+                it[SubmissionTable.letter] = letter
+                it[SubmissionTable.type] = type
+                it[SubmissionTable.status] = status
+            }
+        }
+        return rowToSubmission(statement?.resultedValues?.get(0))
+    }
+
+
+    override suspend fun getSubmissionById(id: Int): Submission? = dbQuery {
+        SubmissionTable.select { SubmissionTable.id eq id }.map { rowToSubmission(it) }.singleOrNull()
+    }
+
+    override suspend fun getSubmissions(): List<Submission>  = dbQuery {
+        SubmissionTable.selectAll().mapNotNull { rowToSubmission(it) }
+    }
+
+    override suspend fun deleteSubmission(submissionId: Int): Boolean = dbQuery {
+        SubmissionTable.deleteWhere { SubmissionTable.id eq submissionId }
+        return@dbQuery true
+    }
+
+    override suspend fun updateSubmissionStatus(submissionId: Int, status: String): Boolean {
+        dbQuery {
+            SubmissionTable.update({SubmissionTable.id eq submissionId}) {
+                it[SubmissionTable.status] = status
+            }
+        }
+        return true
+    }
+
+    override suspend fun updateSubmissionType(submissionId: Int, type: String): Boolean {
+        dbQuery {
+            SubmissionTable.update({SubmissionTable.id eq submissionId}) {
+                it[SubmissionTable.type] = type
+            }
+        }
+        return true
+    }
+
+    private fun rowToSubmission(row: ResultRow?): Submission?{
+        if(row == null){
+            return null
+        }
+        return Submission(
+            id = row[SubmissionTable.id],
+            eventID = row[SubmissionTable.eventID],
+            userTo = row[SubmissionTable.userTo],
+            userFrom = row[SubmissionTable.userFrom],
+            letter = row[SubmissionTable.letter],
+            type = row[SubmissionTable.type],
+            status = row[SubmissionTable.status]
+        )
+    }
+
+
     private fun rowToPrefs(row: ResultRow?): PrefCommon?{
         if(row == null){
             return null
@@ -222,7 +297,9 @@ class RepositoryImpl: Repository {
             dateTime = row[Events.dateTime],
             creator = row[Events.creator],
             hours = row[Events.hours],
-            coins = row[Events.coins]
+            coins = row[Events.coins],
+            city = row[Events.city],
+            place = row[Events.place]
         )
     }
 

@@ -1,4 +1,4 @@
-package com.example.data.model
+package com.example.data.model.common
 
 import io.ktor.server.auth.*
 

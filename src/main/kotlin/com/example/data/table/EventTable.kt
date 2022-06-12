@@ -19,4 +19,6 @@ object Events: IntIdTable() {
     val creator: Column<Int> = integer("creator_id")
     val hours: Column<Int> = integer("hours")
     val coins: Column<Int> = integer("coins")
+    val city: Column<String> = varchar("city",200)
+    val place: Column<String> = varchar("place",200)
 }

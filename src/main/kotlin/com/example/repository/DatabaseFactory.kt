@@ -1,9 +1,6 @@
 package com.example.repository
 
-import com.example.data.table.EventsPrefs
-import com.example.data.table.OrganizationTable
-import com.example.data.table.UserTable
-import com.example.data.table.VolunteersPrefs
+import com.example.data.table.*
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +19,7 @@ object DatabaseFactory {
             SchemaUtils.create(VolunteersPrefs)
             SchemaUtils.create(OrganizationTable)
             SchemaUtils.create(EventsPrefs)
+            SchemaUtils.create(SubmissionTable)
         }
     }
 

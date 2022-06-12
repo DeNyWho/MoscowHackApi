@@ -15,6 +15,7 @@ import com.example.routes.prefs.getEventPref
 import com.example.routes.prefs.getPrefs
 import com.example.routes.prefs.getVolunteerPrefs
 import com.example.routes.prefs.setPrefs
+import com.example.routes.submission.*
 import com.example.routes.users.*
 import com.example.routes.volunteer.insertVolunteer
 import io.ktor.http.*
@@ -62,6 +63,13 @@ fun Application.configureRouting() {
         getEvent(db)
         deleteEvent(db)
 
+        //Submission
+        insertSubmission(db)
+        getSubmissionById(db)
+        getSubmissions(db)
+        deleteSubmission(db)
+        updateSubmissionType(db)
+        updateSubmissionStatus(db)
     }
 
 }
