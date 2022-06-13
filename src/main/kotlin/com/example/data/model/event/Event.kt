@@ -5,6 +5,7 @@ import io.ktor.server.auth.*
 @kotlinx.serialization.Serializable
 data class Event(
     val id: Int,
+    val name: String,
     val description: String,
     val dateTime: String,
     val creator: Int,

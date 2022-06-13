@@ -93,6 +93,7 @@ interface Repository {
     suspend fun getOrganizationById(id: Int): Organization?
 
     suspend fun insertEvent(
+        name: String,
         description: String,
         dateTime: String,
         creator: Int,

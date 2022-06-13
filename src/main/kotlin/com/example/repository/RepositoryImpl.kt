@@ -189,6 +189,7 @@ class RepositoryImpl: Repository {
     }
 
     override suspend fun insertEvent(
+        name: String,
         description: String,
         dateTime: String,
         creator: Int,
@@ -204,6 +205,7 @@ class RepositoryImpl: Repository {
         var statement: InsertStatement<Number>? = null
         dbQuery {
             statement =  Events.insert {
+                it[Events.name] = name
                 it[Events.description] = description
                 it[Events.dateTime] = dateTime
                 it[Events.creator] = creator
@@ -396,6 +398,7 @@ class RepositoryImpl: Repository {
     private fun rowToEvent(row: ResultRow): Event {
         return Event(
             id = row[Events.id].value,
+            name = row[Events.name],
             description = row[Events.description],
             dateTime = row[Events.dateTime],
             creator = row[Events.creator],

@@ -14,6 +14,7 @@ class Event(id: EntityID<Int>) : Entity<Int>(id) {
 }
 
 object Events: IntIdTable() {
+    val name: Column<String> = varchar("name", 512)
     val description: Column<String> = varchar("description", 512)
     val dateTime: Column<String> = varchar("dateTime", 512)
     val creator: Column<Int> = integer("creator_id")

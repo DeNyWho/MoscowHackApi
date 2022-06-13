@@ -2,6 +2,7 @@ package com.example.data.model.request
 
 @kotlinx.serialization.Serializable
 data class EventRequest(
+    val name: String,
     val description: String,
     val dateTime: String,
     val creator: Int,

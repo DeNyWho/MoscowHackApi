@@ -15,6 +15,8 @@ fun Route.insertEvent(
 ) {
     post(EventRoute.EVENT_INSERT) {
         val parameters = call.receive<EventRequest>()
+
+        val name = parameters.name
         val description = parameters.description
         val dateTime = parameters.dateTime
         val creator = parameters.creator
@@ -30,6 +32,7 @@ fun Route.insertEvent(
 
         try {
             val newEvent = db.insertEvent(
+                name = name,
                 description = description,
                 dateTime = dateTime,
                 creator = creator,
@@ -45,6 +48,7 @@ fun Route.insertEvent(
             newEvent?.id?.let {
                 val event = EventResponse(
                     id = it,
+                    name = name,
                     description = description,
                     dateTime = dateTime,
                     creator = creator,

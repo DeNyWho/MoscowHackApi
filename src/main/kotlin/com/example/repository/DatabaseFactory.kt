@@ -26,8 +26,10 @@ object DatabaseFactory {
 
     private fun hikari(): HikariDataSource {
         val config = HikariConfig()
-        config.driverClassName = System.getenv("JDBC_DRIVER")
-        config.jdbcUrl = System.getenv("DATABASE_URL")
+        config.driverClassName = "org.postgresql.Driver"
+        config.jdbcUrl = "jdbc:postgresql://abul.db.elephantsql.com:5432/fyqembrw"
+        config.username = "fyqembrw"
+        config.password = "ke5IEKyPZU06qaD6IcW577naIjDl6tlU"
         config.maximumPoolSize = 3
         config.isAutoCommit = false
         config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"

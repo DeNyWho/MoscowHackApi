@@ -8,7 +8,7 @@ import com.example.data.model.user.User
 class JwtService {
 
     private val issuer = "BoberDB"
-    private val jwtSecret = System.getenv("JWT_SECRET")
+    private val jwtSecret = "dendy"
     private val algorithm = Algorithm.HMAC512(jwtSecret)
 
     val verifier: JWTVerifier = JWT

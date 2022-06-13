@@ -16,6 +16,7 @@ fun Route.getEvent(db: Repository) {
             eventDetailsFromDb.id.let {
                 val event = EventResponse(
                     id = it,
+                    name = eventDetailsFromDb.name,
                     description = eventDetailsFromDb.description,
                     dateTime = eventDetailsFromDb.dateTime,
                     creator = eventDetailsFromDb.creator,
